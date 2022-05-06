@@ -4,7 +4,9 @@ A simple collection of interdependent micorservices.
 
 ## Prerequisites
 
-You'll need the following on your operating system before you begin: - `docker`
+You'll need the following on your operating system before you begin:
+
+- `docker`
 
 ## Setup
 
