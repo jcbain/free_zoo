@@ -3,13 +3,9 @@ const tracer = require("../tracer-experimental")("dogs");
 const express = require("express");
 const axios = require("axios");
 
-// const observer = require("../observer");
+const { getHosts } = require("../helpers/helpers");
 
-// try {
-//   observer("dogs");
-// } catch (e) {
-//   console.error(`observer not running\n`, e);
-// }
+const hosts = getHosts();
 
 const app = express();
 const PORT = 9999;
@@ -24,17 +20,18 @@ app.get("/", (req, res) => {
 
 // this should take 2 seconds
 app.get("/dogs", (req, res) => {
-  sayHello();
   const span = tracer.startSpan("dogs:Timeout()");
+  sayHello();
+  span.end();
+
   setTimeout(() => {
     res.json(["pippa", "prairie", "chewbacca"]);
   }, 2000);
-  span.end();
 });
 
 // response should take 3 seconds
 app.get("/idk", (req, res) => {
-  axios.get("http://cats:8888/cats").then((cats) => {
+  axios.get(`${hosts.cats}/cats`).then((cats) => {
     setTimeout(() => {
       res.json(cats.data);
     }, 3000);
@@ -42,16 +39,11 @@ app.get("/idk", (req, res) => {
 });
 
 app.get("/rand", async (req, res) => {
-  const animals = await axios.get("http://random:7777/");
+  const animals = await axios.get(`${hosts.rand}/`);
 
   setTimeout(() => {
     res.json(animals.data);
   }, 5000);
-});
-
-process.on("SIGINT", function onSigint() {
-  console.info("Received SIGINT.");
-  process.exit(130); // Or applicable exit code depending on OS and signal
 });
 
 app.listen(PORT, () => console.log(`🐶 on port ${PORT}`));

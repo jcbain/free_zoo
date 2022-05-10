@@ -2,14 +2,20 @@ version: "3.9"
 services:
   cats:
     image: "free_zoo/cats"
+    env_file:
+      - .env
     ports:
       - "8888:8888"
   dogs:
     image: "free_zoo/dogs"
+    env_file:
+      - .env
     ports:
       - "9999:9999"
   random:
     image: "free_zoo/random"
+    env_file:
+      - .env
     ports:
       - "7777:7777"
   jaeger:

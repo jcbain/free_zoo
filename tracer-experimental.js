@@ -2,6 +2,8 @@
 
 const opentelemetry = require("@opentelemetry/api");
 const { NodeTracerProvider } = require("@opentelemetry/sdk-trace-node");
+const { OTLPTraceExporter } = require("@opentelemetry/exporter-otlp-grpc");
+
 const { Resource } = require("@opentelemetry/resources");
 const {
   SemanticResourceAttributes,
@@ -12,17 +14,17 @@ const { registerInstrumentations } = require("@opentelemetry/instrumentation");
 const {
   getNodeAutoInstrumentations,
 } = require("@opentelemetry/auto-instrumentations-node");
-const { JaegerExporter } = require("@opentelemetry/exporter-jaeger");
+// const { JaegerExporter } = require("@opentelemetry/exporter-jaeger");
 
-const options = {
-  tags: [], // optional
-  // You can use the default UDPSender
-  host: "http://jaeger", // optional
-  port: 6832, // optional
-  // OR you can use the HTTPSender as follows
-  endpoint: "http://jaeger:14268/api/traces",
-  maxPacketSize: 65000, // optional
-};
+// const options = {
+//   tags: [], // optional
+//   // You can use the default UDPSender
+//   host: "http://jaeger", // optional
+//   port: 6832, // optional
+//   // OR you can use the HTTPSender as follows
+//   endpoint: "http://jaeger:14268/api/traces",
+//   maxPacketSize: 65000, // optional
+// };
 
 module.exports = (serviceName) => {
   const provider = new NodeTracerProvider({
@@ -32,7 +34,8 @@ module.exports = (serviceName) => {
   });
 
   //   const exporter = new ConsoleSpanExporter();
-  const exporter = new JaegerExporter(options);
+  // const exporter = new JaegerExporter(options);
+  const exporter = new OTLPTraceExporter();
   provider.addSpanProcessor(new SimpleSpanProcessor(exporter));
 
   provider.register();

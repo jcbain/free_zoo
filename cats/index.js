@@ -1,16 +1,11 @@
 const tracer = require("../tracer-experimental")("cats");
+
 const express = require("express");
 const axios = require("axios");
 
-const { sleep } = require("../helpers/helpers");
+const { sleep, getHosts } = require("../helpers/helpers");
 
-// const observer = require("../observer");
-
-// try {
-//   observer("cats");
-// } catch (e) {
-//   console.error(`observer not running\n`, e);
-// }
+const hosts = getHosts();
 
 const app = express();
 const PORT = 8888;
@@ -20,9 +15,9 @@ app.get("/", (req, res) => {
 });
 
 app.get("/cats", async (req, res) => {
-  const span = tracer.startSpan("cats:sleep(5000)");
+  // const span = tracer.startSpan("cats:sleep(5000)");
   await sleep(5000);
-  span.end();
+  // span.end();
 
   setTimeout(() => {
     res.json(["sed", "gus", "sybil"]);
@@ -30,7 +25,7 @@ app.get("/cats", async (req, res) => {
 });
 
 app.get("/idk", async (req, res) => {
-  const dogs = await axios.get("http://dogs:9999/dogs");
+  const dogs = await axios.get(`${hosts.dogs}/dogs`);
 
   setTimeout(() => {
     res.json(dogs.data);
@@ -38,7 +33,7 @@ app.get("/idk", async (req, res) => {
 });
 
 app.get("/rand", async (req, res) => {
-  const animals = await axios.get("http://random:7777/");
+  const animals = await axios.get(`${hosts.rand}/`);
 
   setTimeout(() => {
     res.json(animals.data);

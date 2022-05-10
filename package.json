@@ -9,6 +9,7 @@
     "@opentelemetry/core": "^1.2.0",
     "@opentelemetry/exporter-collector": "^0.25.0",
     "@opentelemetry/exporter-jaeger": "^1.2.0",
+    "@opentelemetry/exporter-otlp-grpc": "^0.26.0",
     "@opentelemetry/exporter-zipkin": "^1.2.0",
     "@opentelemetry/instrumentation": "^0.28.0",
     "@opentelemetry/node": "^0.24.0",

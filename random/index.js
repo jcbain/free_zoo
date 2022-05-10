@@ -3,19 +3,15 @@ const tracer = require("../tracer-experimental")("rand");
 const express = require("express");
 const axios = require("axios");
 
-// const observer = require("../observer");
+const { getHosts } = require("../helpers/helpers");
 
-// try {
-//   observer("rando");
-// } catch (e) {
-//   console.error(`observer not running\n`, e);
-// }
+const hosts = getHosts();
 
 const services = [
-  "http://cats:8888/idk",
-  "http://cats:8888/cats",
-  "http://dogs:9999/idk",
-  "http://dogs:9999/dogs",
+  `${hosts.cats}/idk`,
+  `${hosts.cats}/cats`,
+  `${hosts.dogs}/idk`,
+  `${hosts.dogs}/dogs`,
 ];
 
 const app = express();
